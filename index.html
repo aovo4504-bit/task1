@@ -2,94 +2,84 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<title>Nhiệm vụ 1 — CozyHub</title>
 
-<!-- 🌍 NGÔN NGỮ -->
-<script>
-let userLang = (navigator.language || "en").toLowerCase();
-if (userLang.startsWith("vi")) userLang="vi"; else if (userLang.startsWith("th")) userLang="th";
-else if (userLang.startsWith("id")) userLang="id"; else if (userLang.startsWith("fil")||userLang.startsWith("ph")) userLang="ph";
-else if (userLang.startsWith("ko")) userLang="kr"; else if (userLang.startsWith("ja")) userLang="jp"; else userLang="en";
-
-const TEXT = {
-    task1_title:{vi:"Nhiệm vụ 1",en:"Mission 1",th:"ภารกิจ 1",id:"Misi 1",ph:"Misyon 1",kr:"미션 1",jp:"ミッション 1"},
-    task1_desc:{vi:"Hoàn thành nhiệm vụ 1 để tiếp tục.",en:"Complete Mission 1 to continue.",
-        th:"ทำภารกิจ 1 เพื่อดำเนินการต่อ",id:"Selesaikan Misi 1 untuk lanjut",
-        ph:"Kumpletuhin ang Misyon 1 para magpatuloy.",
-        kr:"미션 1을 완료해야 진행됩니다.",jp:"ミッション1を完了して続行します。"},
-    task1_open:{vi:"Mở nhiệm vụ 1",en:"Open Mission 1",th:"เปิดภารกิจ 1",id:"Buka Misi 1",ph:"Buksan Misyon 1",kr:"미션 1 열기",jp:"ミッション1を開く"},
-    task1_done:{vi:"Tôi đã làm xong nhiệm vụ 1",en:"I completed Mission 1",th:"ฉันทำภารกิจ 1 เสร็จแล้ว",
-        id:"Saya telah menyelesaikan Misi 1",ph:"Tapos ko na ang Misyon 1",kr:"미션 1 완료",jp:"ミッション1完了"},
-    task1_complete_msg:{vi:"Bạn đã hoàn thành nhiệm vụ 1!",en:"Mission 1 completed!",th:"คุณทำภารกิจ 1 สำเร็จ!",
-        id:"Misi 1 selesai!",ph:"Tapos na ang Misyon 1!",kr:"미션 1 완료!",jp:"ミッション1完了！"},
-    next_to_task2:{vi:"Chuyển sang nhiệm vụ 2 →",en:"Go to Mission 2 →",th:"ไปยังภารกิจ 2 →",
-        id:"Lanjut ke Misi 2 →",ph:"Magpatuloy sa Misyon 2 →",kr:"미션 2로 이동 →",jp:"ミッション2へ →"}
-};
-</script>
-
-<!-- 🎨 UI Neon -->
 <style>
-/* Giữ nguyên như home.html */
-body{margin:0;font-family:'Poppins',sans-serif;background:#050811;
-display:flex;justify-content:center;align-items:center;height:100vh;color:white;}
+body {
+  margin:0;background:#050811;color:#fff;
+  height:100vh;display:flex;justify-content:center;align-items:center;
+  font-family:Poppins,sans-serif;
+}
 .bg{position:fixed;inset:0;background:radial-gradient(circle at top,#132033,#050811 60%,#02040A);z-index:-1;}
-.card{width:430px;max-width:92vw;background:rgba(7,11,20,0.92);padding:40px 30px;
-border-radius:26px;text-align:center;border:1px solid rgba(0,255,255,0.25);
-box-shadow:0 0 45px rgba(0,255,255,0.25);}
-.logo{width:120px;height:120px;margin:0 auto 15px;border-radius:50%;
-background:url('https://raw.githubusercontent.com/aovo4504-bit/Cozyhub/main/IMG_0830.png') center/cover;
-box-shadow:0 0 18px #00eaff;}
-.title{font-size:32px;color:#00eaff;text-shadow:0 0 15px #00eaff;}
-.btn{margin-top:16px;width:100%;padding:14px;background:#00eaff;color:#001015;
-font-size:18px;font-weight:700;border:none;border-radius:14px;cursor:pointer;
-box-shadow:0 0 25px rgba(0,255,255,0.7);transition:0.18s;}
+.card{
+  width:480px;max-width:92vw;background:rgba(7,11,20,.92);
+  padding:40px 30px;border-radius:26px;text-align:center;
+  border:1px solid rgba(0,255,255,.25);box-shadow:0 0 45px rgba(0,255,255,.25);
+}
+.logo{
+  width:130px;height:130px;margin:0 auto 15px;border-radius:50%;
+  background:url('https://raw.githubusercontent.com/aovo4504-bit/Cozyhub/main/IMG_0830.png') center/cover;
+  box-shadow:0 0 18px #00eaff;
+}
+.title{
+  font-size:32px;color:#00eaff;margin-bottom:10px;
+  text-shadow:0 0 15px #00eaff;
+}
+.msg{margin-top:14px;font-size:16px;opacity:.9;}
+.btn{
+  width:100%;padding:16px;margin-top:18px;
+  background:#00c7ff;border:none;border-radius:18px;
+  color:#001015;font-size:19px;font-weight:700;
+  cursor:pointer;box-shadow:0 0 25px #00c7ff;transition:.2s;
+}
 .btn:hover{transform:scale(1.05);}
-.btn.green{background:#00ff9d;}
-.btn.disabled{background:#224047!important;opacity:0.4;cursor:not-allowed!important;box-shadow:none!important;}
-.msg{margin-top:12px;opacity:0;transition:0.25s;font-size:15px;}
-.msg.show{opacity:1;}
-.msg.ok{color:#75ff9c;}
+.btn.green{background:#00ff9d;box-shadow:0 0 25px #00ff9d;}
+.btn.disabled{
+  background:#244754!important;opacity:.4;cursor:not-allowed!important;box-shadow:none!important;
+}
 </style>
-
 </head>
 <body>
 
 <div class="bg"></div>
 <div class="card">
-    <div class="logo"></div>
+  <div class="logo"></div>
+  <div class="title">Nhiệm vụ 1</div>
 
-    <div id="title" class="title"></div>
-    <p id="desc"></p>
+  <div id="status" class="msg"></div>
 
-    <button id="openBtn" class="btn" onclick="openTask1()"></button>
-    <button id="doneBtn" class="btn green" onclick="doneTask1()"></button>
-
-    <button id="nextBtn" class="btn disabled"></button>
-
-    <div id="msg" class="msg"></div>
+  <button id="btnTask1" class="btn" onclick="openMission1()">Làm nhiệm vụ 1</button>
+  <button id="btnToTask2" class="btn green disabled">Làm nhiệm vụ 2 →</button>
 </div>
 
 <script>
-// dịch
-title.textContent = TEXT.task1_title[userLang];
-desc.textContent  = TEXT.task1_desc[userLang];
-openBtn.textContent = TEXT.task1_open[userLang];
-doneBtn.textContent = TEXT.task1_done[userLang];
-nextBtn.textContent  = TEXT.next_to_task2[userLang];
-
-function openTask1(){
-    window.open("YOUR_MISSION_1_LINK","_blank");
+// Nếu từ verify1 quay về có ?verify=1: set task1=done
+const qs = new URLSearchParams(location.search);
+if (qs.get("verify") === "1") {
+  localStorage.setItem("task1","done");
+  // xoá param khỏi URL cho sạch (optional)
+  history.replaceState(null,"",location.pathname);
 }
 
-function doneTask1(){
-    sessionStorage.setItem("task1_done","1");
-
-    msg.textContent = TEXT.task1_complete_msg[userLang];
-    msg.classList.add("show","ok");
-
-    nextBtn.classList.remove("disabled");
-    nextBtn.onclick = ()=> location.href="task2.html";
+function updateStatus(){
+  const done1 = localStorage.getItem("task1") === "done";
+  if (!done1){
+    status.innerHTML = "❗ Bạn <b>chưa</b> làm nhiệm vụ 1.";
+    btnToTask2.classList.add("disabled");
+    btnToTask2.onclick = null;
+  } else {
+    status.innerHTML = "✅ Bạn đã hoàn thành nhiệm vụ 1.<br>Tiếp tục sang nhiệm vụ 2.";
+    btnToTask2.classList.remove("disabled");
+    btnToTask2.onclick = ()=> location.href="task2.html";
+  }
 }
+
+function openMission1(){
+  // 🔗 THAY bằng Linkvertise nhiệm vụ 1 của bạn
+  window.location.href = "https://linkvertise.com/YOUR_TASK1_ID";
+}
+
+updateStatus();
 </script>
-
 </body>
 </html>
