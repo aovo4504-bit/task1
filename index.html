@@ -2,29 +2,98 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Verify Mission 1</title>
+<title>Nhiệm vụ 1 — CozyHub</title>
+
 <style>
-body{margin:0;background:#050811;color:#fff;height:100vh;display:flex;justify-content:center;align-items:center;font-family:Poppins,system-ui,sans-serif;text-align:center;padding:20px;}
+/* dùng style neon tương tự getkey của bạn */
+body {
+  margin:0;
+  font-family:'Poppins',system-ui,sans-serif;
+  background:#050811;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:#fff;
+}
+.bg{position:fixed;inset:0;background:radial-gradient(circle at top,#132033,#050811 60%,#02040A);z-index:-1;}
+.card{
+  width:480px;max-width:92vw;
+  background:rgba(7,11,20,.92);
+  padding:40px 30px;
+  border-radius:26px;
+  text-align:center;
+  border:1px solid rgba(0,255,255,.25);
+  box-shadow:0 0 45px rgba(0,255,255,.25);
+}
+.logo{
+  width:130px;height:130px;
+  margin:0 auto 15px;border-radius:50%;
+  background:url('https://raw.githubusercontent.com/aovo4504-bit/Cozyhub/refs/heads/main/IMG_0830.png') center/cover;
+  box-shadow:0 0 20px #00eaff;
+}
+.title{
+  font-size:32px;
+  color:#00eaff;
+  text-shadow:0 0 15px #00eaff;
+  margin-bottom:10px;
+}
+.msg{margin-top:14px;font-size:16px;opacity:.9;}
+.btn{
+  width:100%;padding:16px;margin-top:18px;
+  background:#00c7ff;border:none;border-radius:18px;
+  color:#001015;font-size:19px;font-weight:700;
+  cursor:pointer;box-shadow:0 0 25px #00c7ff;
+  transition:.2s;
+}
+.btn:hover{transform:scale(1.05);}
+.btn.green{background:#00ff9d;box-shadow:0 0 25px #00ff9d;}
+.btn.disabled{background:#244754!important;opacity:.4;cursor:not-allowed!important;box-shadow:none!important;}
 </style>
 </head>
 <body>
-<div id="text" data-t="verify_wait">Verifying...</div>
+<div class="bg"></div>
+
+<div class="card">
+  <div class="logo"></div>
+  <div class="title" data-t="task1_title"></div>
+  <p class="msg" data-t="task1_desc"></p>
+  <p id="status" class="msg"></p>
+
+  <button id="btnTask1" class="btn" onclick="openMission1()" data-t="btn_task1"></button>
+  <button id="btnToTask2" class="btn green disabled" data-t="btn_to_task2"></button>
+</div>
 
 <script src="lang.js"></script>
 <script>
 applyLang();
 
-const SECRET1 = "ABC123"; // 🔐 mã bí mật cho nhiệm vụ 1
-
+// nhận verify=1 từ verify1
 const qs = new URLSearchParams(location.search);
-const code = qs.get("code");
-
-if (code === SECRET1) {
+if (qs.get("verify") === "1") {
   localStorage.setItem("cozy_task1","done");
-  location.href = "task1.html?verify=1";
-} else {
-  document.getElementById("text").innerHTML = TEXT.verify_invalid[LANG];
+  history.replaceState(null,"",location.pathname);
 }
+
+function updateStatus(){
+  const done1 = localStorage.getItem("cozy_task1") === "done";
+  if (!done1){
+    status.innerHTML = TEXT.task1_notyet[LANG];
+    btnToTask2.classList.add("disabled");
+    btnToTask2.onclick = null;
+  } else {
+    status.innerHTML = TEXT.task1_done[LANG];
+    btnToTask2.classList.remove("disabled");
+    btnToTask2.onclick = () => location.href = "task2.html";
+  }
+}
+
+function openMission1(){
+  // 🔗 THAY LINK LINKVERTISE NHIỆM VỤ 1
+  window.location.href = "https://linkvertise.com/YOUR_TASK1_ID";
+}
+
+updateStatus();
 </script>
 </body>
 </html>
