@@ -7,31 +7,30 @@
 <style>
     body {
         margin: 0;
-        font-family: 'Poppins', system-ui, sans-serif;
+        font-family: 'Poppins', sans-serif;
         background: #050811;
         height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #ffffff;
+        color: white;
     }
 
     .bg {
         position: fixed;
         inset: 0;
-        background:
-            radial-gradient(circle at top, #151b2b 0, #050811 55%, #02040a 100%);
-        z-index: -2;
+        background: radial-gradient(circle at top, #151b2b, #050811 55%, #02040a 100%);
+        z-index: -1;
     }
 
     .card {
         width: 430px;
-        background: rgba(7, 11, 20, 0.92);
-        padding: 34px 30px;
-        border-radius: 26px;
+        padding: 30px;
+        background: rgba(7,11,20,0.92);
+        border-radius: 24px;
         text-align: center;
-        box-shadow: 0 0 45px rgba(0,255,255,0.25);
         border: 1px solid rgba(0,255,255,0.25);
+        box-shadow: 0 0 45px rgba(0,255,255,0.25);
     }
 
     .logo {
@@ -44,34 +43,25 @@
     }
 
     h1 {
-        font-size: 32px;
-        margin: 10px 0;
+        font-size: 28px;
         color: #00eaff;
-        text-shadow: 0 0 10px rgba(0,255,255,0.6);
+        text-shadow: 0 0 14px #00eaff;
     }
 
-    .desc { opacity: 0.8; }
-
     .btn {
-        margin-top: 18px;
+        margin-top: 20px;
         padding: 12px;
         width: 100%;
         border-radius: 10px;
-        cursor: pointer;
         border: none;
-        font-size: 16px;
         background: #00eaff;
         color: #001015;
-        box-shadow: 0 0 24px rgba(0,255,255,0.5);
-        transition: 0.3s;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 0 22px rgba(0,255,255,0.5);
+        transition: 0.25s;
     }
-    .btn:hover { transform: scale(1.05); }
-
-    .btn.disabled {
-        opacity: 0.4;
-        pointer-events: none;
-    }
-
+    .btn:hover { transform: scale(1.04); }
 </style>
 </head>
 <body>
@@ -80,59 +70,47 @@
 
 <div class="card">
     <div class="logo"></div>
-    <h1 id="title">Mission 1</h1>
-
-    <p id="desc" class="desc"></p>
-    <p id="status"></p>
-
-    <button id="btnMission1" class="btn"></button>
-    <button id="btnToMission2" class="btn disabled"></button>
+    <h1 id="title"></h1>
+    <p id="desc"></p>
+    <button class="btn" id="nextBtn"></button>
 </div>
 
 <script>
-/* 🌍 Auto Language */
-let langRaw = (navigator.language || "en").toLowerCase();
-let lang = langRaw.startsWith("vi") ? "vi" : "en";
+let lang = navigator.language.startsWith("vi") ? "vi" : "en";
 
 const TEXT = {
-  title: { vi: "Nhiệm vụ 1", en: "Mission 1" },
-  desc: {
-    vi: "Hoàn thành nhiệm vụ 1 để mở khóa nhiệm vụ 2.",
-    en: "Complete mission 1 to unlock mission 2."
-  },
-  not_done: { vi:"Bạn chưa làm nhiệm vụ 1.", en:"You haven't done mission 1." },
-  done: {
-    vi:"Bạn đã hoàn thành nhiệm vụ 1 → sang nhiệm vụ 2.",
-    en:"You finished mission 1 → Continue to mission 2."
-  },
-  btn1: { vi:"Làm nhiệm vụ 1", en:"Do mission 1" },
-  btn2: { vi:"Sang nhiệm vụ 2 →", en:"Go to mission 2 →" }
+    title: { vi: "Nhiệm vụ 1", en: "Mission 1" },
+    descOk: { vi: "Bạn đã hoàn thành nhiệm vụ 1.", en: "You completed mission 1." },
+    descNeed: { vi: "Bạn chưa làm nhiệm vụ 1.", en: "You haven’t completed mission 1." },
+    next: { vi: "Sang nhiệm vụ 2 →", en: "Go to Mission 2 →" }
 };
 
-function t(key){ return TEXT[key][lang]; }
+function t(k){return TEXT[k][lang];}
 
-/* UI */
-document.getElementById("title").textContent = t("title");
-document.getElementById("desc").textContent = t("desc");
-document.getElementById("btnMission1").textContent = t("btn1");
-document.getElementById("btnToMission2").textContent = t("btn2");
+// Lấy verify từ URL
+const qs = new URLSearchParams(location.search);
+const verify = qs.get("verify");
 
-const statusEl = document.getElementById("status");
-const btnM2 = document.getElementById("btnToMission2");
-
-let done1 = localStorage.getItem("cozy_task1") === "done";
-if (done1) {
-    statusEl.textContent = t("done");
-    btnM2.classList.remove("disabled");
-    btnM2.onclick = () => location.href = "task2.html";
-} else {
-    statusEl.textContent = t("not_done");
+// Nếu verify=1 → lưu nhiệm vụ 1
+if (verify === "1") {
+    localStorage.setItem("cozy_task1", "done");
 }
 
-/* 🚀 LINK NHIỆM VỤ 1 — ĐÃ GẮN LINKVERTISE */
-document.getElementById("btnMission1").onclick = () => {
-    window.location.href = "https://linkvertise.com/1457968/QjNBNjqV4XQe?o=sharing";
-};
+// Nếu user CHƯA làm NV1 → không cho vào
+if (localStorage.getItem("cozy_task1") !== "done") {
+    document.getElementById("title").textContent = t("title");
+    document.getElementById("desc").textContent = t("descNeed");
+    document.getElementById("nextBtn").textContent = "← Home";
+    document.getElementById("nextBtn").onclick = () => location.href = "home.html";
+    throw new Error("Not verified NV1");
+}
+
+// Nếu đã làm NV1 → cho sang NV2
+document.getElementById("title").textContent = t("title");
+document.getElementById("desc").textContent = t("descOk");
+document.getElementById("nextBtn").textContent = t("next");
+document.getElementById("nextBtn").onclick = () => location.href = "task2.html";
 </script>
+
 </body>
 </html>
