@@ -5,63 +5,12 @@
 <title>CozyHub - Mission 1</title>
 
 <style>
-    body {
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
-        background: #050811;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-    }
-
-    .bg {
-        position: fixed;
-        inset: 0;
-        background: radial-gradient(circle at top, #151b2b, #050811 55%, #02040a 100%);
-        z-index: -1;
-    }
-
-    .card {
-        width: 430px;
-        padding: 30px;
-        background: rgba(7,11,20,0.92);
-        border-radius: 24px;
-        text-align: center;
-        border: 1px solid rgba(0,255,255,0.25);
-        box-shadow: 0 0 45px rgba(0,255,255,0.25);
-    }
-
-    .logo {
-        width: 110px;
-        height: 110px;
-        margin: 0 auto 16px;
-        border-radius: 50%;
-        background: url('https://raw.githubusercontent.com/aovo4504-bit/Cozyhub/refs/heads/main/IMG_0830.png') center/cover;
-        box-shadow: 0 0 18px #00eaff;
-    }
-
-    h1 {
-        font-size: 28px;
-        color: #00eaff;
-        text-shadow: 0 0 14px #00eaff;
-    }
-
-    .btn {
-        margin-top: 20px;
-        padding: 12px;
-        width: 100%;
-        border-radius: 10px;
-        border: none;
-        background: #00eaff;
-        color: #001015;
-        font-size: 16px;
-        cursor: pointer;
-        box-shadow: 0 0 22px rgba(0,255,255,0.5);
-        transition: 0.25s;
-    }
-    .btn:hover { transform: scale(1.04); }
+    body { margin:0;font-family:'Poppins',sans-serif;background:#050811;height:100vh;display:flex;justify-content:center;align-items:center;color:white; }
+    .bg { position:fixed;inset:0;background:radial-gradient(circle at top,#151b2b,#050811 55%,#02040a 100%);z-index:-1; }
+    .card { width:430px;padding:30px;background:rgba(7,11,20,0.9);border-radius:24px;text-align:center;border:1px solid rgba(0,255,255,0.25);box-shadow:0 0 34px rgba(0,255,255,0.3); }
+    .logo { width:110px;height:110px;margin:0 auto 16px;border-radius:50%;background:url('https://raw.githubusercontent.com/aovo4504-bit/Cozyhub/refs/heads/main/IMG_0830.png') center/cover;box-shadow:0 0 18px #00eaff; }
+    h1 { font-size:28px;color:#00eaff;text-shadow:0 0 14px #00eaff; }
+    .btn { margin-top:20px;padding:12px;width:100%;border-radius:10px;border:none;background:#00eaff;color:#001015;font-size:17px;cursor:pointer;box-shadow:0 0 22px rgba(0,255,255,0.5); }
 </style>
 </head>
 <body>
@@ -76,36 +25,80 @@
 </div>
 
 <script>
-let lang = navigator.language.startsWith("vi") ? "vi" : "en";
+const LANG = (() => {
+    const l = navigator.language.toLowerCase();
+    if (l.startsWith("vi")) return "vi";
+    if (l.startsWith("th")) return "th";
+    if (l.startsWith("id")) return "id";
+    if (l.startsWith("es")) return "es";
+    if (l.startsWith("ph")) return "ph";
+    return "en";
+})();
 
 const TEXT = {
-    title: { vi: "Nhiệm vụ 1", en: "Mission 1" },
-    descOk: { vi: "Bạn đã hoàn thành nhiệm vụ 1.", en: "You completed mission 1." },
-    descNeed: { vi: "Bạn chưa làm nhiệm vụ 1.", en: "You haven’t completed mission 1." },
-    next: { vi: "Sang nhiệm vụ 2 →", en: "Go to Mission 2 →" }
+    title: {
+        vi:"Nhiệm vụ 1",
+        en:"Mission 1",
+        th:"ภารกิจที่ 1",
+        id:"Misi 1",
+        ph:"Misyon 1",
+        es:"Misión 1"
+    },
+    descOk: {
+        vi:"Bạn đã hoàn thành nhiệm vụ 1!",
+        en:"You completed mission 1!",
+        th:"คุณทำภารกิจที่ 1 สำเร็จแล้ว!",
+        id:"Anda telah menyelesaikan misi 1!",
+        ph:"Natapos mo ang misyon 1!",
+        es:"¡Has completado la misión 1!"
+    },
+    descNeed: {
+        vi:"Bạn chưa hoàn thành nhiệm vụ 1!",
+        en:"You haven't completed mission 1!",
+        th:"คุณยังไม่สำเร็จภารกิจที่ 1!",
+        id:"Anda belum menyelesaikan misi 1!",
+        ph:"Hindi mo pa natatapos ang misyon 1!",
+        es:"¡No has completado la misión 1!"
+    },
+    next: {
+        vi:"Sang nhiệm vụ 2 →",
+        en:"Go to Mission 2 →",
+        th:"ไปยังภารกิจที่ 2 →",
+        id:"Ke Misi 2 →",
+        ph:"Pumunta sa Misyon 2 →",
+        es:"Ir a la misión 2 →"
+    },
+    back: {
+        vi:"← Quay lại",
+        en:"← Back",
+        th:"← กลับ",
+        id:"← Kembali",
+        ph:"← Bumalik",
+        es:"← Volver"
+    }
 };
 
-function t(k){return TEXT[k][lang];}
+function t(k){ return TEXT[k][LANG]; }
 
-// Lấy verify từ URL
+// Lấy verify
 const qs = new URLSearchParams(location.search);
 const verify = qs.get("verify");
 
-// Nếu verify=1 → lưu nhiệm vụ 1
+// Nếu verify=1 → lưu NV1
 if (verify === "1") {
     localStorage.setItem("cozy_task1", "done");
 }
 
-// Nếu user CHƯA làm NV1 → không cho vào
+// Nếu chưa làm NV1 → không cho vào
 if (localStorage.getItem("cozy_task1") !== "done") {
     document.getElementById("title").textContent = t("title");
     document.getElementById("desc").textContent = t("descNeed");
-    document.getElementById("nextBtn").textContent = "← Home";
+    document.getElementById("nextBtn").textContent = t("back");
     document.getElementById("nextBtn").onclick = () => location.href = "home.html";
-    throw new Error("Not verified NV1");
+    throw new Error("Mission 1 not verified");
 }
 
-// Nếu đã làm NV1 → cho sang NV2
+// Nếu làm rồi → cho sang NV2
 document.getElementById("title").textContent = t("title");
 document.getElementById("desc").textContent = t("descOk");
 document.getElementById("nextBtn").textContent = t("next");
