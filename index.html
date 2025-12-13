@@ -1,58 +1,391 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Cozy Hub - Task 1</title>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#050811;color:#eaf6ff;font-family:system-ui,Poppins,sans-serif}
-.card{width:min(420px,92vw);padding:22px;border-radius:18px;border:1px solid rgba(0,229,255,.22);background:#070b17cc;text-align:center;box-shadow:0 0 50px rgba(0,229,255,.12)}
-.btn{width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(90deg,#00e5ff,#00b7ff);font-weight:800;cursor:pointer}
-.small{opacity:.85;margin-top:10px;font-size:13px}
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cozy Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --bg:#050811;
+  --card:#071326cc;
+  --cyan:#00f0ff;
+  --cyan2:#00c6ff;
+  --text:#eaf9ff;
+  --muted:#a8c7d3;
+  --danger:#ff4d6d;
+  --ok:#2bff88;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+.bg-canvas{position:absolute;inset:0;z-index:0}
+.card{
+  position:relative;z-index:2;
+  width:min(420px,92vw);
+  background:linear-gradient(180deg,#061426ee,#060a14dd);
+  border:1px solid rgba(0,240,255,.25);
+  border-radius:22px;
+  padding:26px 24px 20px;
+  box-shadow: 0 0 22px rgba(0,240,255,.16), 0 0 64px rgba(0,240,255,.08);
+  backdrop-filter: blur(10px);
+}
+.logo{
+  width:92px;height:92px;border-radius:50%;
+  margin:0 auto 10px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), rgba(255,255,255,0) 60%),
+              url('https://i.imgur.com/QmY1w3N.png');
+  background-size:cover;
+  border:1px solid rgba(0,240,255,.32);
+  box-shadow:0 0 0 10px rgba(0,240,255,.04), 0 0 28px rgba(0,240,255,.28);
+}
+.title{
+  font-size:34px; font-weight:800; text-align:center; letter-spacing:.3px;
+  color:var(--cyan);
+  text-shadow:0 0 18px rgba(0,240,255,.35);
+}
+.sub{
+  text-align:center; color:var(--muted);
+  margin:10px 6px 18px;
+  line-height:1.35;
+}
+.btn{
+  width:100%;
+  border:none; cursor:pointer;
+  padding:13px 16px;
+  border-radius:14px;
+  background:linear-gradient(90deg,var(--cyan),var(--cyan2));
+  color:#001018;
+  font-weight:800;
+  letter-spacing:.2px;
+  box-shadow:0 0 18px rgba(0,240,255,.22);
+  position:relative;
+  overflow:hidden;
+}
+.btn:disabled{opacity:.6; cursor:not-allowed}
+.btn::after{
+  content:"";
+  position:absolute; inset:-60% -40%;
+  background:linear-gradient(120deg,rgba(255,255,255,.0),rgba(255,255,255,.35),rgba(255,255,255,0));
+  transform:translateX(-60%) rotate(12deg);
+  transition:transform .7s ease;
+}
+.btn:hover::after{transform:translateX(60%) rotate(12deg)}
+.row{
+  display:flex; gap:10px; margin-top:10px;
+}
+.pill{
+  flex:1;
+  border:1px solid rgba(0,240,255,.18);
+  background:rgba(0,240,255,.06);
+  color:var(--muted);
+  border-radius:14px;
+  padding:10px 12px;
+  font-size:12px;
+  text-align:center;
+}
+.msg{
+  margin-top:12px;
+  border-radius:14px;
+  padding:10px 12px;
+  font-size:13px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.06);
+  display:none;
+}
+.msg.show{display:block}
+.msg.ok{border-color:rgba(43,255,136,.35); background:rgba(43,255,136,.08)}
+.msg.error{border-color:rgba(255,77,109,.35); background:rgba(255,77,109,.08)}
+.icons{
+  display:flex; gap:14px; justify-content:center;
+  margin-top:16px;
+}
+.iconbtn{
+  width:46px;height:46px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,240,255,.07);
+  border:1px solid rgba(0,240,255,.20);
+  box-shadow:0 0 16px rgba(0,240,255,.10);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.iconbtn:hover{
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 0 24px rgba(0,240,255,.18);
+  background:rgba(0,240,255,.10);
+}
+.iconbtn img{width:26px;height:26px; filter: drop-shadow(0 0 10px rgba(0,240,255,.25));}
+.small{
+  text-align:center; font-size:11px; color:rgba(168,199,211,.75);
+  margin-top:10px;
+}
+.kbox{
+  margin-top:14px;
+  padding:12px 12px;
+  border-radius:14px;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(0,240,255,.18);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  text-align:center;
+  user-select:text;
+}
+.krow{display:flex;gap:10px;margin-top:10px}
+.krow .btn{flex:1}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;margin-bottom:8px
+}
+.langsel{
+  background:rgba(0,240,255,.08);
+  border:1px solid rgba(0,240,255,.18);
+  color:var(--text);
+  border-radius:12px;
+  padding:8px 10px;
+  font-size:12px;
+}
 </style>
 </head>
 <body>
-<div class="card">
-  <h2 style="margin:0;color:#00e5ff">Mission 1</h2>
-  <p id="p">Complete mission 1, then click “I’m done”.</p>
-  <button class="btn" id="do">Start Mission 1</button>
-  <button class="btn" id="done" style="margin-top:10px;background:rgba(255,255,255,.08);color:#eaf6ff;border:1px solid rgba(0,229,255,.18)">I’m done</button>
-  <div class="small" id="s"></div>
-</div>
+  <canvas id="bg" class="bg-canvas"></canvas>
+  <div class="wrap">
+    <div class="card">
+      <div class="topbar">
+        <div style="opacity:.75;font-size:12px">VIP PRO</div>
+        <select id="langsel" class="langsel">
+          <option value="en">EN</option>
+          <option value="vi">VI</option>
+          <option value="th">TH</option>
+          <option value="id">ID</option>
+          <option value="ph">PH</option>
+        </select>
+      </div>
+      <div class="logo"></div>
+      <div class="title">Cozy Hub</div>
+      <div class="sub" id="subtxt"></div>
+
+      <button class="btn" id="btnMain"></button>
+
+      <div class="msg" id="msg"></div>
+      <div class="small" id="small"></div>
+    </div>
+  </div>
 
 <script>
-const langRaw=(navigator.language||"en").toLowerCase();
-const lang = (langRaw.startsWith("vi")?"vi":langRaw.startsWith("th")?"th":langRaw.startsWith("id")?"id":(langRaw.startsWith("fil")||langRaw.startsWith("ph")||langRaw.startsWith("tl"))?"ph":"en");
-const T={
-  p:{en:"Complete mission 1, then click “I’m done”.",vi:"Hoàn thành nhiệm vụ 1 rồi bấm “Đã xong”.",th:"ทำภารกิจ 1 ให้เสร็จแล้วกด “เสร็จแล้ว”",id:"Selesaikan misi 1 lalu klik “Selesai”.",ph:"Tapusin ang mission 1 tapos i-click “Done”."},
-  do:{en:"Start Mission 1",vi:"Làm nhiệm vụ 1",th:"เริ่มภารกิจ 1",id:"Mulai Misi 1",ph:"Simulan ang Mission 1"},
-  done:{en:"I’m done",vi:"Đã xong",th:"เสร็จแล้ว",id:"Selesai",ph:"Done"},
-  wait:{en:"Issuing secure token…",vi:"Đang tạo token bảo mật…",th:"กำลังสร้างโทเค็น…",id:"Membuat token…",ph:"Gumagawa ng token…"},
-  err:{en:"System error. Try again.",vi:"Lỗi hệ thống. Thử lại.",th:"ระบบผิดพลาด ลองใหม่",id:"Error sistem. Coba lagi.",ph:"System error. Subukan ulit."}
-};
-document.getElementById("p").textContent=T.p[lang];
-document.getElementById("do").textContent=T.do[lang];
-document.getElementById("done").textContent=T.done[lang];
+(function(){
+  const c=document.getElementById('bg');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  let w,h,parts=[];
+  function resize(){
+    w=c.width=window.innerWidth; h=c.height=window.innerHeight;
+    parts=Array.from({length:Math.min(140, Math.floor((w*h)/14000))}, ()=>({
+      x:Math.random()*w, y:Math.random()*h,
+      r:1+Math.random()*2.6,
+      vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35,
+      a:.15+Math.random()*.35
+    }));
+  }
+  window.addEventListener('resize',resize,{passive:true});
+  resize();
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    // glow dots
+    for(const p of parts){
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x< -20) p.x=w+20;
+      if(p.x>w+20) p.x=-20;
+      if(p.y< -20) p.y=h+20;
+      if(p.y>h+20) p.y=-20;
+      ctx.beginPath();
+      ctx.fillStyle=`rgba(0,240,255,${p.a})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    }
+    // subtle connections
+    for(let i=0;i<parts.length;i++){
+      for(let j=i+1;j<parts.length;j++){
+        const a=parts[i], b=parts[j];
+        const dx=a.x-b.x, dy=a.y-b.y;
+        const d=dx*dx+dy*dy;
+        if(d<150*150){
+          const alpha = 0.06*(1-d/(150*150));
+          ctx.strokeStyle=`rgba(0,240,255,${alpha})`;
+          ctx.lineWidth=1;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+<script type="module">
 
-document.getElementById("do").onclick=()=> {
-  localStorage.setItem("cozy_task1_clicked","1");
-  location.href="https://direct-link.net/1457968/wqITOYXxDOMd";
+const LANGS = ["en","vi","th","id","ph"];
+function getLang(){
+  const q = new URLSearchParams(location.search);
+  const forced = (q.get("lang")||"").toLowerCase();
+  if(LANGS.includes(forced)) return forced;
+  // default EN always
+  return "en";
+}
+const lang = getLang();
+function t(dict){ return dict[lang] ?? dict.en ?? ""; }
+
+
+const CFG = {
+  "PING": "https://cozyhub-verify1.aovo4504.workers.dev/confirm",
+  "NEXT": "https://cozyhub-verify2.aovo4504.workers.dev/go",
+  "NV2_LINK": "https://link-target.net/1457968/nP7uWHQKwUUq",
+  "TASK2_RETURN": "/task2/?verify=1"
 };
 
-document.getElementById("done").onclick=async ()=>{
-  document.getElementById("s").textContent=T.wait[lang];
-  try{
-    const res = await fetch("https://cozyhub-verify1.aovo4504.workers.dev/issue",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ ok:true })
-    });
-    const data = await res.json();
-    if(!data.ok) throw 0;
-    localStorage.setItem("cozy_task1","done");
-    location.href = "https://aovo4504-bit.github.io/task2/index.html?token="+encodeURIComponent(data.token);
-  }catch(e){
-    document.getElementById("s").textContent=T.err[lang];
+const TEXT = {
+  "sub": {
+    "en": "Mission 1 completed. Confirm below to continue to Mission 2.",
+    "vi": "Đã xong nhiệm vụ 1. Xác nhận để chuyển sang nhiệm vụ 2.",
+    "th": "ภารกิจ 1 เสร็จแล้ว ยืนยันเพื่อไปภารกิจ 2",
+    "id": "Misi 1 selesai. Konfirmasi untuk lanjut ke Misi 2.",
+    "ph": "Tapos na ang Mission 1. I-confirm para pumunta sa Mission 2."
+  },
+  "btn": {
+    "en": "Go to Mission 2",
+    "vi": "Làm nhiệm vụ 2",
+    "th": "ไปภารกิจ 2",
+    "id": "Ke Misi 2",
+    "ph": "Mission 2"
+  },
+  "working": {
+    "en": "Preparing...",
+    "vi": "Đang chuẩn bị...",
+    "th": "กำลังเตรียม...",
+    "id": "Menyiapkan...",
+    "ph": "Inihahanda..."
+  },
+  "confirmed": {
+    "en": "Verified. You can continue.",
+    "vi": "Đã xác nhận. Bạn có thể tiếp tục.",
+    "th": "ยืนยันแล้ว ไปต่อได้",
+    "id": "Terverifikasi. Lanjutkan.",
+    "ph": "Verified. Pwede na."
+  },
+  "need_verify": {
+    "en": "You must come from the shortlink (missing verify flag).",
+    "vi": "Bạn phải đi từ shortlink (thiếu verify).",
+    "th": "ต้องมาจากลิงก์โฆษณา (ขาด verify)",
+    "id": "Harus dari shortlink (verify hilang).",
+    "ph": "Dapat galing sa shortlink (missing verify)."
+  },
+  "no_token": {
+    "en": "Missing token. Go back to HOME and start again.",
+    "vi": "Thiếu token. Quay lại HOME và làm lại.",
+    "th": "ไม่มีโทเค็น กลับ HOME แล้วเริ่มใหม่",
+    "id": "Token hilang. Kembali ke HOME.",
+    "ph": "Walang token. Balik HOME."
+  },
+  "err": {
+    "en": "System error. Please retry from HOME.",
+    "vi": "Lỗi hệ thống. Hãy làm lại từ HOME.",
+    "th": "ระบบผิดพลาด โปรดเริ่มใหม่จาก HOME",
+    "id": "Error sistem. Mulai lagi dari HOME.",
+    "ph": "System error. Balik HOME."
+  },
+  "small": {
+    "en": "Step-lock enabled • anti-skip flag required",
+    "vi": "Có khóa bước • cần cờ chống vượt",
+    "th": "ล็อคขั้น • ต้องมี anti-skip",
+    "id": "Step-lock aktif • butuh anti-skip flag",
+    "ph": "May step-lock • kailangan anti-skip flag"
   }
 };
+
+function setLangUI(){
+  document.getElementById("langsel").value = lang;
+  document.getElementById("subtxt").textContent = t(TEXT.sub);
+  document.getElementById("btnMain").textContent = t(TEXT.btn);
+  document.getElementById("small").textContent = t(TEXT.small);
+}
+setLangUI();
+
+document.getElementById("langsel").addEventListener("change", (e)=>{
+  const v=e.target.value;
+  const q=new URLSearchParams(location.search); q.set("lang", v);
+  location.search = q.toString();
+});
+
+function show(type, text){
+  const m=document.getElementById('msg');
+  m.className = "msg show " + (type==="error" ? "error":"ok");
+  m.textContent = text;
+}
+
+function mustVerifyFlag(){
+  const q=new URLSearchParams(location.search);
+  return q.get("verify")==="1";
+}
+
+async function run(){
+  if(!mustVerifyFlag()){
+    show("error", t(TEXT.need_verify));
+    document.getElementById("btnMain").disabled=true;
+    return;
+  }
+
+  const tokenKey = "cozy_t1";
+  const token = sessionStorage.getItem(tokenKey) || "";
+  if(!token){
+    show("error", t(TEXT.no_token));
+    document.getElementById("btnMain").disabled=true;
+    return;
+  }
+
+  // confirm step on server
+  try{
+    const res = await fetch(CFG.PING, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ token, v:1 })
+    });
+    const data = await res.json();
+    if(!data.ok) throw new Error("confirm fail");
+    show("ok", t(TEXT.confirmed));
+
+    // on button click -> go next
+    document.getElementById("btnMain").addEventListener("click", async ()=>{
+      const btn=document.getElementById("btnMain");
+      btn.disabled=true;
+      btn.textContent=t(TEXT.working);
+      try{
+        const resp = await fetch(CFG.NEXT, {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({ token, v:1 })
+        });
+        const out = await resp.json();
+        if(!out.ok) throw new Error(out.code||"bad");
+        if(out.nextTokenKey && out.nextToken){
+          sessionStorage.setItem(out.nextTokenKey, out.nextToken);
+        }
+        location.href = out.redirect;
+      }catch(e){
+        console.error(e);
+        show("error", t(TEXT.err));
+        btn.disabled=false;
+        btn.textContent=t(TEXT.btn);
+      }
+    });
+
+  }catch(e){
+    console.error(e);
+    show("error", t(TEXT.err));
+    document.getElementById("btnMain").disabled=true;
+  }
+}
+
+run();
 </script>
 </body>
 </html>
